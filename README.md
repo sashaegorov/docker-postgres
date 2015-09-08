@@ -96,7 +96,16 @@ During the image preparation where is the chance container will leave. These con
 # TODO
 ## How to look inside?
 
-    docker run --name postgres-9-4-bash postgres-9-4 /bin/bash
+Example of how to attach to container. [More](https://docs.docker.com/reference/commandline/attach/) about `attach` command.
 
-http://www.postgresql.org/message-id/BLU102-W2529897925D1499BB8B0CEA1F00@phx.gbl
-docker attach postgres-9-4
+    docker run --name postgres-9-4-bash postgres-9-4 /bin/bash
+    docker attach postgres-9-4
+
+## How to push it somewhere?
+
+    $ docker tag postgres-9-4 localhost:5000/postgres-9-4
+    $ docker push localhost:5000/postgres-9-4
+    The push refers to a repository [localhost:5000/postgres-9-4] (len: 1)
+    Sending image list
+    Pushing repository localhost:5000/postgres-9-4 (1 tags)
+    ...
