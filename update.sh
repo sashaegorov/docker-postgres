@@ -17,12 +17,13 @@ travisEnv=
 for version in "${versions[@]}"; do
 	fullVersion="$(grep -m1 -A10 "^Package: postgresql-$version\$" "$packages" | grep -m1 '^Version: ' | cut -d' ' -f2)"
 	(
-		set -x
-		cp docker-entrypoint.sh Dockerfile.template "$version/"
-		mv "$version/Dockerfile.template" "$version/Dockerfile"
+		# set -x
+    echo "Updating for ${version}"
+    cp docker-*.sh "${version}"
+		cp Dockerfile "${version}"
 		sed -i 's/%%PG_MAJOR%%/'$version'/g; s/%%PG_VERSION%%/'$fullVersion'/g' "$version/Dockerfile"
 	)
-	
+
 	travisEnv='\n  - VERSION='"$version$travisEnv"
 done
 
