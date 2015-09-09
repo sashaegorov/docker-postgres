@@ -19,7 +19,7 @@ Perform following actions to build PostgreSQL container by yourself.
     Updating for 9.5
 
     # Perform build for version 9.4
-    $ docker build --force-rm=true -t postgres-9-4 9.4/
+    $ docker build --force-rm=true -t postgres:9.4 9.4/
 
 Wait until completion message appears:
 
@@ -111,3 +111,6 @@ Example of how to attach to container. [More](https://docs.docker.com/reference/
     Sending image list
     Pushing repository localhost:5000/postgres-9-4 (1 tags)
     ...
+
+# Programming, Humblehacker!
+![Programming, Humblehacker!](http://s3.amazonaws.com/zedshaw.progmofo/bg.png)
