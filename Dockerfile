@@ -1,5 +1,5 @@
 FROM debian:jessie
-ENV LANG="en_US.utf8" \
+ENV LOCALE="en_US.UTF-8" \
     PG_MAJOR=%%PG_MAJOR%% \
     PG_VERSION=%%PG_VERSION%% \
     PATH=/usr/lib/postgresql/%%PG_MAJOR%%/bin:$PATH \

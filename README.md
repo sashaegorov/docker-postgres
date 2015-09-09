@@ -98,8 +98,10 @@ During the image preparation where is the chance container will leave. These con
 
 Example of how to attach to container. [More](https://docs.docker.com/reference/commandline/attach/) about `attach` command.
 
-    docker run --name postgres-9-4-bash postgres-9-4 /bin/bash
-    docker attach postgres-9-4
+    # Run it in background
+    $ docker run -d --name postgres-9-4-bg -p 5432:5432 --restart=always postgres-9-4
+    # Exec
+    docker exec -i -t postgres-9-4-bg bash
 
 ## How to push it somewhere?
 

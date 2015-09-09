@@ -15,7 +15,7 @@ if [ "$1" = 'postgres' ]; then
 
 	# look specifically for PG_VERSION, as it is expected in the DB dir
 	if [ ! -s "$PGDATA/PG_VERSION" ]; then
-		gosu postgres initdb
+		gosu postgres initdb --locale=${LOCALE}
 
 		# check password first so we can output the warning before postgres
 		# messes it up
@@ -27,14 +27,13 @@ if [ "$1" = 'postgres' ]; then
 			cat >&2 <<-'EOWARN'
 				****************************************************
 				WARNING: No password has been set for the database.
-				         This will allow anyone with access to the
-				         Postgres port to access your database. In
-				         Docker's default configuration, this is
-				         effectively any other container on the same
-				         system.
-
-				         Use "-e POSTGRES_PASSWORD=password" to set
-				         it in "docker run".
+				This will allow anyone with access to the
+				Postgres port to access your database. In
+				Docker's default configuration, this is
+				effectively any other container on the same
+				system.
+				Use "-e POSTGRES_PASSWORD=password" to set
+				it in "docker run"!
 				****************************************************
 			EOWARN
 
@@ -44,7 +43,7 @@ if [ "$1" = 'postgres' ]; then
 
 		{ echo; echo "host all all 0.0.0.0/0 $authMethod"; } >> "$PGDATA/pg_hba.conf"
 
-		# internal start of server in order to allow set-up using psql-client		
+		# internal start of server in order to allow set-up using psql-client
 		# does not listen on TCP/IP and waits until start finishes
 		gosu postgres pg_ctl -D "$PGDATA" \
 			-o "-c listen_addresses=''" \
