@@ -33,7 +33,7 @@ echo "locales locales/default_environment_locale select ${LOCALE}" | debconf-set
 echo "locales locales/locales_to_be_generated multiselect ${LOCALE} UTF-8" | debconf-set-selections
 
 echo 'Check locales preconfiguration...'
-debconf-get-selections |grep '^locales'
+debconf-get-selections | grep '^locales'
 
 apt-get install -y locales
 dpkg-reconfigure locales
@@ -58,17 +58,16 @@ echo "localepurge localepurge/remove_no note" | debconf-set-selections
 echo "localepurge localepurge/none_selected boolean false" | debconf-set-selections
 echo "localepurge localepurge/use-dpkg-feature boolean false" | debconf-set-selections
 echo "localepurge localepurge/verbose boolean false" | debconf-set-selections
-debconf-get-selections |grep ^localepurge
+
+echo 'Check localepurge preconfiguration...'
+debconf-get-selections | grep ^localepurge
 
 apt-get install -y localepurge
 dpkg-reconfigure localepurge
-# rm -rf /var/lib/apt/lists/*
 
 echo 'Installing prerequisites...'
 apt-get install -y --no-install-recommends ca-certificates
 apt-get install -y --no-install-recommends wget
-
-rm -rf /var/lib/apt/lists/*
 
 echo 'Installing `gosu` utility...'
 # grab gosu for easy step-down from root
@@ -94,11 +93,40 @@ sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/create
 apt-get install -y --force-yes --no-install-recommends postgresql-$PG_MAJOR=$PG_VERSION \
   postgresql-contrib-$PG_MAJOR=$PG_VERSION
 
+# ========================================
+# Install Git
+apt-get install -y --force-yes --no-install-recommends git
+apt-get install -y --force-yes --no-install-recommends build-essential
+apt-get install -y --force-yes --no-install-recommends \
+postgresql-server-dev-${PG_MAJOR}
+
+# In stall pg_dbms_stats PostgreSQL extension (http://pgdbmsstats.osdn.jp/)
+# Refer http://pgdbmsstats.osdn.jp/pg_dbms_stats-en.html#install
+echo 'Installing `pg_dbms_stats`...'
+cd /tmp &&  git clone http://scm.osdn.jp/gitroot/pgdbmsstats/pg_dbms_stats.git
+cd pg_dbms_stats
+git checkout REL1_3_6 && make && make install
+
+# In stall pg_hint_plan PostgreSQL extension (http://pghintplan.osdn.jp/)
+# Refer http://pghintplan.osdn.jp/pg_hint_plan.html#install
+echo 'Installing `pg_hint_plan`...'
+cd /tmp && git clone http://scm.osdn.jp/gitroot/pghintplan/pg_hint_plan.git
+cd pg_hint_plan
+git checkout REL94_1_1_3 && make && make install
+
+cd /
+# Uninstall Git!
+apt-get purge -y --auto-remove git build-essential
+apt-get purge -y --auto-remove postgresql-server-dev-${PG_MAJOR}
+
+# ========================================
+
 echo "Cleaning..."
 apt-get purge -y --auto-remove ca-certificates wget
 apt-get purge -y --auto-remove localepurge debconf-utils apt-utils
 
-rm -rf /var/lib/apt/lists/*
-apt-get clean
+apt-get clean autoclean
+apt-get autoremove -y
+rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql

@@ -60,6 +60,12 @@ if [ "$1" = 'postgres' ]; then
 			echo
 		fi
 
+		psql --username postgres <<-EOSQL
+			CREATE EXTENSION pg_hint_plan;
+			CREATE EXTENSION pg_dbms_stats;
+		EOSQL
+		echo
+
 		if [ "$POSTGRES_USER" = 'postgres' ]; then
 			op='ALTER'
 		else
