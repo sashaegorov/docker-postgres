@@ -105,10 +105,9 @@ Perform some magic:
     ## Run it
     $ docker run -d postgres:9.4
     ## Use ID to reimport image with different tag
-    $ docker export 11681b952924 | docker import --change "ENV LOCALE=en_US.UTF-8 PG_MAJOR=9.4 PG_VERSION=9.4.4-1.pgdg80+1 PATH=/usr/lib/postgresql/9.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin PGDATA=/var/lib/postgresql/data" \
-    --change "VOLUME /var/lib/postgresql/data" \
+    $ docker export c17bb4fc8c1123390028a6ede6e00d1c9619f1fd5dea7c44d4da3ed937d5bc73 | docker import --change "ENV LOCALE=en_US.UTF-8 PG_MAJOR=9.4 PATH=/usr/lib/postgresql/9.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin PGDATA=/var/lib/postgresql/data" \
     --change "EXPOSE 5432" \
-    --change "CMD /docker-entrypoint.sh postgres" - postgres:9.4flat
+    --change "CMD /bin/bash /docker-entrypoint.sh postgres" - postgres:9.4flat
 
 Check new size:
 
@@ -166,8 +165,7 @@ Example of how to attach to container. [More](https://docs.docker.com/reference/
 ## How to push it somewhere?
 
     $ docker tag postgres:9.4 localhost:5000/postgres:9.4
-    $ docker push localhost:5000/postgres-9-4
-    The push refers to a repository [localhost:5000/postgres-9-4] (len: 1)
-    Sending image list
-    Pushing repository localhost:5000/postgres-9-4 (1 tags)
+    $ docker push localhost:5000/postgres:9.4
+    ...
+    Pushing repository localhost:5000/postgres:9.4 (1 tags)
     ...
