@@ -1,4 +1,5 @@
-FROM debian:jessie
+FROM debian:8.2
+MAINTAINER Alexander Egorov <a.a.egoroff@gmail.com>
 ENV LOCALE="en_US.UTF-8" \
     PG_MAJOR=%%PG_MAJOR%% \
     PG_VERSION=%%PG_VERSION%% \

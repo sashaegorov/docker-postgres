@@ -17,7 +17,7 @@ echo "PATH: ${PATH}"
 echo 'Adding PostgreSQL user...'
 groupadd -r postgres && useradd -r -g postgres postgres
 
-# Gettin packeages info
+# Getting packeages info
 apt-get update
 
 # Make preconfiguration possible
@@ -115,6 +115,7 @@ cd pg_hint_plan
 git checkout REL94_1_1_3 && make && make install
 
 cd /
+
 # Uninstall Git!
 apt-get purge -y --auto-remove git build-essential
 apt-get purge -y --auto-remove postgresql-server-dev-${PG_MAJOR}
